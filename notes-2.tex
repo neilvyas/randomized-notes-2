@@ -4,6 +4,7 @@
 \DeclareMathOperator*{\E}{\mathbb{E}}
 \let\Pr\relax
 \DeclareMathOperator*{\Pr}{\mathbb{P}}
+\DeclareMathOperator*{\var}{\mathbf{Var}}
 
 \newcommand{\eps}{\epsilon}
 \newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
@@ -60,7 +61,57 @@ In the last lecture we \ldots.
 
 In this lecture we \ldots.
 
+\section{Introduction}
+
 \section{Probability Background}
+\begin{theorem}
+  \textbf{Linearity of expectation.}
+
+  If $X_1,\dots,X_n$ are random variables, then
+  $$ \E\left[\sum_{i=1}^n X_i\right] = \sum_{i=1}^n \E[X_i] $$
+\end{theorem}
+
+Example: Suppose $X_1,\dots,X_n$ are Bernoulli trials with $p=0.5$. Let $X = \sum_{i=1}^n E_i$. Then
+$$ \E[X] = \sum_{i=1}^n \E[X_i] = \frac{n}{2} $$
+
+\begin{definition}
+  The variance of a random variable $X$, denoted $\var[X]$, is defined as
+  $$ \var[X] = \E\left[(X - \E[X])^2\right] $$
+\end{definition}
+
+\begin{observation}
+Note that if $Y_1$ and $Y_2$ are independent random variables with $\E[Y_1] = \E[Y_2] = 0$, then
+\begin{align*}
+  \var[Y_1 + Y_2] &= \E\left[(Y_1 + Y_2)^2\right] \\
+                  &= \E\left[Y_1^2 + Y_2^2 + 2Y_1Y_2\right] \\
+                  &= \E\left[Y_1^2\right] + \E\left[Y_2^2\right] + 2\E[Y_1]\E[Y_2] &\small\text{(since $Y_1$ and $Y_2$ are independent)}\\
+                  &= \E\left[Y_1^2\right] + \E\left[Y_2^2\right] \\
+                  &= \var[Y_1] + \var[Y_2]
+\end{align*}
+\end{observation}
+
+\begin{claim}\label{claima}
+We claim (without proof) that if $Y_1$ and $Y_2$ are independent, then $\var[Y_1 + Y_2] = \var[Y_1] + \var[Y_2]$ (i.e. $\E[Y_1]$ and $\E[Y_2]$ need not be zero).
+\end{claim}
+
+Example: Suppose $X_1,\dots,X_n$ are independent Bernoulli trials with $p=0.5$. Let $X = \sum_{i=1}^n E_i$. Then
+\begin{align*}
+  \var[X] &= \sum_{i=1}^n \var[X_i] &\small\text{(by Claim \ref{claima})}\\
+          &= n\left[ \frac12 \left(\frac12\right)^2 + \frac12 \left(\frac12\right)^2 \right] \\
+          &= \frac{n}{4}
+\end{align*}
+
+If $n=1000$, then $\var[X] = 250$ and the standard deviation of $X = \sqrt{\var[X]} \approx 16$.
+
+\begin{theorem}
+  \textbf{The central limit theorem}
+  Suppose $X_1,\dots,X_n$ are independent identically distributed random variables with expected value $\mu$ and variance $\sigma^2$.
+
+  Then as $n \to \infty$, the sample average $S_n = \frac{X_1 + \dots + X_n}{n}$ converges to the Gaussian
+  $$ N\left(\mu, \frac{\sigma^2}{n}\right) $$
+
+  Some statements of the central limit theorem give bounds on convergence, but unfortunately these bounds are not tight enough to be useful in this example.
+\end{theorem}
 
 \section{Bounding the Sum of Bernoulli Trials}
 
