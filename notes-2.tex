@@ -61,7 +61,18 @@ In the last lecture we \ldots.
 
 In this lecture we \ldots.
 
-\section{Introduction}
+\section{Food for Thought}
+
+\begin{enumerate}
+  \item Suppose you flip an unbiased coin 1000 times. How surprised would you be if we observed
+    \begin{itemize}
+      \item 500 heads?
+      \item 510 heads?
+      \item 600 heads?
+      \item 1000 heads?
+    \end{itemize}
+  \item Suppose you have a biased coin that lands heads with an unknown probability $p$. How many flips will it take to learn $p$ to an error of $\pm \eps$ with probability $1 - \delta$?
+\end{enumerate}
 
 \section{Probability Background}
 \begin{theorem}
@@ -113,7 +124,30 @@ If $n=1000$, then $\var[X] = 250$ and the standard deviation of $X = \sqrt{\var[
   Some statements of the central limit theorem give bounds on convergence, but unfortunately these bounds are not tight enough to be useful in this example.
 \end{theorem}
 
+By the central limit theorem, as the number of coin tosses goes to infinity, our binomial distribution of coin tosses converges to a Gaussian $N(\mu, \sigma^2)$ where $\mu = \frac{n}{2}$ and $\sigma^2 = \frac{n}{4}$, as we calculated above.
+
 \section{Bounding the Sum of Bernoulli Trials}
+
+Let's return to our coin-tossing problem.
+
+Can we find an upper bound on the probability that the number of coin tosses exceeds a certain number?
+
+\begin{claim}\label{gaussianbound}
+  If $Z$ is drawn from a Gaussian with mean $\mu$ and variance $\sigma^2$, then
+  \begin{align*}
+    \Pr[Z \ge \mu + t] &\le e^{-\frac{t^2}{2\sigma^2}} \quad \forall t \ge 0 \\
+    \Pr[Z \le \mu - t] &\le e^{-\frac{t^2}{2\sigma^2}} \quad \forall t \ge 0
+  \end{align*}
+
+\end{claim}
+If our distribution were Gaussian, we could use the bound from Claim \ref{gaussianbound}:
+\begin{align*}
+  &&\Pr[X \ge 500 + \sigma^2 t] &\le e^{-\frac{t^2}{2}} \\
+  &\Rightarrow &\Pr[X \ge 500 + 16t] &\le e^{-\frac{t^2}{2}} \\
+  &\Rightarrow &\Pr[X \ge 600] &\le e^{-18} \\
+\end{align*}
+
+
 
 \section{The Coupon Collecting Problem}
 
