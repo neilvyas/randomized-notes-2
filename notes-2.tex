@@ -138,16 +138,73 @@ Can we find an upper bound on the probability that the number of coin tosses exc
     \Pr[Z \ge \mu + t] &\le e^{-\frac{t^2}{2\sigma^2}} \quad \forall t \ge 0 \\
     \Pr[Z \le \mu - t] &\le e^{-\frac{t^2}{2\sigma^2}} \quad \forall t \ge 0
   \end{align*}
-
+  (We omit the proof.)
 \end{claim}
-If our distribution were Gaussian, we could use the bound from Claim \ref{gaussianbound}:
+
+If our distribution were Gaussian (or if we were willing to invoke the central limit theorem), we could use the bound from Claim \ref{gaussianbound}:
 \begin{align*}
-  &&\Pr[X \ge 500 + \sigma^2 t] &\le e^{-\frac{t^2}{2}} \\
+  &&\Pr[X \ge 500 + \sigma t] &\le e^{-\frac{t^2}{2}} \\
   &\Rightarrow &\Pr[X \ge 500 + 16t] &\le e^{-\frac{t^2}{2}} \\
   &\Rightarrow &\Pr[X \ge 600] &\le e^{-18} \\
 \end{align*}
+But unfortunately, we have a binomial distribution, not a Gaussian, and we don't want to use the central limit theorem. What should we do?
 
+\begin{definition}
+  \textbf{Chernoff bound (for the discrete setting)}
+  Let $X = \sum_{i=1}^n X_i$, where the $X_i$ take on values in $[0,1]$ and are independent. (The $X_i$ can take on any value between 0 and 1. Also, the $X_i$ need not be identical.)
+  Then
+  \begin{align*}
+    \Pr[X \ge \E[X] + t] &\le e^{-\frac{2t^2}{n}} \\
+    \Pr[X \le \E[X] - t] &\le e^{-\frac{2t^2}{n}}
+  \end{align*}
+\end{definition}
 
+If we use the Chernoff bound, we get:
+\begin{align*}
+  \Pr[X \ge 500 + \sigma t]
+    &\le e^{-\frac{2t^2\sigma^2}{n}} \\
+    &= e^{-\frac{2t^2(n/4)}{n}} &\small\text{(since $\sigma^2 = \frac{n}{4}$)}\\
+    &= e^{-\frac{t^2}{2}}
+\end{align*}
+
+% TODO Did he say that the Chernoff bound is basically tight,
+% or that the Gaussian bound is basically tight?
+Note that this is the same bound that we got from the Gaussian! So the Chernoff bound is basically tight in this case.
+
+\subsection{Evaluating the Chernoff Bound}
+There are a few limitations of the Chernoff bound in this situation.
+
+The main limitation is that it does not depend on the variance of the $X_i$. Suppose each $X_i$ has a very low probability, say,
+$$\Pr[X_i] = \frac{1}{10\sqrt{n}}$$
+Then
+$$ \E[X] = \frac{1}{10\sqrt{n}} \cdot n = \frac{\sqrt{n}}{10} $$
+Then the Chernoff bound would give us $1 - \delta$ confidence interval of
+\begin{align*}
+  && \Pr[X \ge \E[X] + t] \le e^{-\frac{2t^2}{n}} = \frac{\delta}{2} \\
+  &\Rightarrow &t = \sqrt{\frac{n\log(2/\delta)}{2}}
+\end{align*}
+So the Chernoff bound gives us $X \in \E[X] \pm \sqrt{\frac{n\log(2/\delta)}{2}}$ with probability $1 - \delta$.
+
+If we pick $\delta = 0.10$, then the bound is $X \in \E[X] \pm \sqrt{10n}$. Note that the width of our confidence interval is about 60 times the expected value!
+
+We know that the bound can be made much tighter here because the variance of the $X_i$ is small. The Chernoff bound doesn't take variance into account. Later in this class, we will encounter Bernstein-type inequalities, which do account for the variance.
+
+Also, note that the Chernoff bound can be less than 0 or greater than $n$, which does not make sense in this problem.
+
+\subsection{Second Food for Thought}
+\textbf{Suppose you have a biased coin that lands heads with an unknown probability $p$. How many flips will it take to learn $p$ to an error of $\pm \eps$ with probability $1 - \delta$?}
+
+We need to find $n$ such that
+$$ \Pr[X \ge (p + \eps)n] \le \frac{\delta}{2} $$
+By the Chernoff bound,
+\begin{align*}
+  \Pr[X \ge (p + \eps)n] &\le e^{-\frac{2(\eps n)^2}{n}} \\
+                         &= e^{-2\eps^2 n}
+\end{align*}
+So we must pick $n$ such that
+$$ e^{-2\eps^2 n} \le \frac \delta 2 $$
+i.e.
+$$ n \ge \frac{1}{2\eps^2}\log\left(\frac{2}{\delta} \right) $$
 
 \section{The Coupon Collecting Problem}
 
