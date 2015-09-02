@@ -208,6 +208,22 @@ $$ n \ge \frac{1}{2\eps^2}\log\left(\frac{2}{\delta} \right) $$
 
 \section{The Coupon Collecting Problem}
 
+\textbf{Suppose there exist $n$ types of coupons, with an infinite supply of each. If you collect coupons uniformly at random, what is the expected number of coupons you must collect to hold at least one of each type?}
+
+Let's consider the case in which we hold $i$ types of coupons already and determine how many we expect to collect before obtaining a new type; denote this expectation as $T_i$.
+
+Then
+\begin{align*}
+  T_0 &= 1 \\
+  T_1 &= 2 \\
+  \ldots \\
+  T_{n-1} &= n \\
+  \ldots \\
+  T_{n-k} &= n / k \\
+  \Rightarrow T = \sum{T_i} &= n \sum_{i=1}^n \frac{1}{k} \leq n(\log n + 1)
+\end{align*}
+Note that $T_{n-k} = n / k$ precisely because we draw coupons uniformly at random.
+
 \section{Background on Complexity Theory}
 
 \section{Adleman's Theorem}
