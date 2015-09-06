@@ -10,6 +10,16 @@
 \newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
 \newcommand{\R}{\mathbb{R}}
 
+%complexity theory variables.
+\newcommand{\Pt}{\ensuremath{\mathbf{P}}}
+\newcommand{\NP}{\ensuremath{\mathbf{NP}}}
+\newcommand{\PP}{\ensuremath{\mathbf{PP}}}
+\newcommand{\BPP}{\ensuremath{\mathbf{BPP}}}
+\newcommand{\ZPP}{\ensuremath{\mathbf{Z_{PP}}}}
+\newcommand{\RP}{\ensuremath{\mathbf{R_{P}}}}
+\newcommand{\coRP}{\ensuremath{\mathbf{coR_{P}}}}
+\newcommand{\Ppoly}{\ensuremath{\mathbf{P_{poly}}}}
+
 \newcommand{\handout}[5]{
   \noindent
   \begin{center}
@@ -50,6 +60,9 @@
 
 \parindent 0in
 \parskip 1.5ex
+
+%for wrapping inline math mode.
+\let\ab\allowbreak
 
 \begin{document}
 
@@ -225,6 +238,24 @@ Then
 Note that $T_{n-k} = n / k$ precisely because we draw coupons uniformly at random.
 
 \section{Background on Complexity Theory}
+
+Let's begin our whirlwind tour of complexity theory. We'll explore, to varying degrees, \Pt,\ \NP,\ab\ \ZPP,\ \RP,\ \coRP, and \BPP.
+
+\subsection{\Pt: Polynomial-time deterministic algorithms}
+
+These can be described by Turing machines and $languages$. A $language$ $\ell$
+
+\subsection{\NP: \Pt\ with a good ``advice'' string}
+
+\subsection{\ZPP\: Zero-error with expected polynomial time}
+
+\subsection{\RP\ and \coRP: One-sided error }
+
+\subsection{\PP\ and \BPP: Two-sided error }
+
+\subsection{\Ppoly\ and amplification}
+
+\subsection{Containment}
 
 \section{Adleman's Theorem}
 
