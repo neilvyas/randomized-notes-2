@@ -243,11 +243,18 @@ Let's begin our whirlwind tour of complexity theory. We'll explore, to varying d
 
 \subsection{\Pt: Polynomial-time deterministic algorithms}
 
-These can be described by Turing machines and $languages$. A $language$ $\ell$
+These can be described by Turing machines and $languages$. A $language$ $\ell \subset \{0,1\}^n$ such that for a candidate $x,\ x \in \ell \Rightarrow$ we accept $x$ as an answer; otherwise we reject.
+Therefore, given an interactive protocol for checking against $\ell$, we can use binary search to determine $x$.
 
 \subsection{\NP: \Pt\ with a good ``advice'' string}
 
+``Advice'' given to a Turing machine is an additional input string allowed to depend on the length of the input, $n$, but not the input itself. A problem is in $\NP \Leftrightarrow \forall\text{inputs, }\exists$ advice such that an algorithm with the given advice always decides correctly. If the advice string is random, then the algorithm is randomized.
+
+Note that for our purposes, the advice string may be arbitrarily long, but the algorithm can only inspect a polynomial-in-the-length-of-the-input amount of it.
+
 \subsection{\ZPP\: Zero-error with expected polynomial time}
+
+This complexity class corresponds to Las Vegas-type randomized algorithms.
 
 \subsection{\RP\ and \coRP: One-sided error }
 
@@ -255,7 +262,26 @@ These can be described by Turing machines and $languages$. A $language$ $\ell$
 
 \subsection{\Ppoly\ and amplification}
 
-\subsection{Containment}
+\subsection{Containments}
+
+It is known that $\Pt\subset\ZPP$, but it is not known whether $\ZPP\subset\Pt$.
+It should also be apparent that $\ZPP = \RP\cap\coRP$.
+
+We claim that $\Pt\subset\RP\subset\NP$, and that $\RP\subset\BPP$; here we will only prove that $\RP\subset\NP$.
+
+$\mathbf{pf: }$
+Let $x$ be a candidate solution to an \RP\ problem. 
+\begin{align*}
+  x\notin\ell &\Rightarrow \text{we discard the advice string}\\
+  x\in\ell &\Rightarrow \exists\text{ an advice string $a$ that can prove that.}\\
+  &\Rightarrow \RP \Rightarrow \NP \text{ involves fixing an advice string.} 
+\end{align*}
+
+It is not known whether the following statements hold:
+
+$\BPP\subset\NP$
+
+$\RP=\ZPP=\coRP$
 
 \section{Adleman's Theorem}
 
