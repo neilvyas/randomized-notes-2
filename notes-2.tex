@@ -227,7 +227,7 @@ $$ n \ge \frac{1}{2\eps^2}\log\left(\frac{2}{\delta} \right) $$
 
 \textbf{Suppose there exist $n$ types of coupons, with an infinite supply of each. If you collect coupons uniformly at random, what is the expected number of coupons you must collect to hold at least one of each type?}
 
-Suppose we hold $i$ types of coupons already. What is the expected number of coupons we must collect until we receive a new type? Denote this expectation as $T_i$.
+
 
 $T_0$ must be 1, since the next coupon we receive is the first coupon, so it must be a new type.
 
@@ -244,37 +244,57 @@ where $H_n = \sum_{i=1}^n \frac{1}{n}$ is the $n$th harmonic number.
 Let's begin our whirlwind tour of complexity theory. We'll explore, to varying degrees, \Pt,\ \NP,\ab\ \ZPP,\ \RP,\ \coRP, and \BPP.
 
 We use as supplemental material section 1.5 from \textit{Randomized Algorithms} by Motwani and Raghavan.
-Note that formally, we use a set of $languages$ meeting some condition to define a complexity class, but we'll be looser and also speak in terms of algorithms inhabiting these classes.
+Note that formally, complexity classes are sets of languages, but we'll be looser and also speak in terms of algorithms inhabiting these classes.
 
 \subsection{\Pt: Polynomial-time deterministic algorithms}
 
-These can be described by Turing machines and $languages$. A $language$ $\ell \subset \{0,1\}^n$ such that for a candidate $x,\ x \in \ell \Rightarrow$ we accept $x$ as an answer; otherwise we reject.
-Therefore, given an interactive protocol for checking against $\ell$, we can use binary search to determine $x$.
+These can be described by Turing machines and \textit{languages}. A \textit{language}  is a set $\ell \subseteq \{0,1\}^n$. Given an input string $x \in \{0,1\}^n$, a Turing machine either accepts the string, rejects the string, or loops. The language of a Turing machine is the set of strings that the Turing machine accepts.
 
-Formally, the class \Pt\ consists of all languages $\ell$ that have a polynomial-time algorithm \Alg\ s.t. for any input $x$,
+It is possible to phrase many non-decision problems as decision problems. For example, suppose the original problem is to find an integer $n$ that has some property. The corresponding decision problem would be: Given an input $x$, is $x$ less than or equal to $n$? In this setting, we can use binary search to find $x$.
+
+\begin{definition}
+The class \Pt\ consists of all languages $\ell$ that have a polynomial-time algorithm \Alg\ such that for any input $x$,
 \begin{align*}
-  x \in \ell &\Rightarrow \Alg \text{ accepts} \\
-  x \notin \ell &\Rightarrow \Alg \text{ accepts}
+  &\text{If $x \in \ell$, $\Alg$ accepts} \\
+  &\text{If $x \not\in \ell$, $\Alg$ rejects}
 \end{align*}
+\end{definition}
 
 \subsection{\NP: \Pt\ with a good ``advice'' string}
 
-``Advice'' given to a Turing machine is an additional input string allowed to depend on the length of the input, $n$, but not the input itself. A problem is in $\NP \Leftrightarrow \forall\text{inputs, }\exists$ advice such that an algorithm with the given advice always decides correctly. If the advice string is random, then the algorithm is randomized.
+``Advice'' given to a Turing machine is an additional input string allowed to depend on the length of the input, $n$, but not the input itself.
 
-Note that for our purposes, the advice string may be arbitrarily long, but the algorithm can only inspect a polynomial-in-the-length-of-the-input amount of it.
+\begin{definition}
+A language $l$ is in $\NP$ if there exists a polynomial-time algorithm $\Alg$ such that for any input $x$,
+\begin{align*}
+  &\text{If $x \in \ell$, there exists an advice string $y$ such that $\Alg$ accepts the input $(x,y)$} \\
+  &\text{If $x \not\in \ell$, then for all strings $y$, $\Alg$ rejects the input $(x,y)$}
+\end{align*}
+\end{definition}
+
+For our purposes, the advice string may be arbitrarily long, but the algorithm can only inspect a polynomial-in-the-length-of-the-input amount of it.
+
+Note the resemblance between advice strings and random bits. We will come back to this later.
 
 \subsection{\RP\ and \coRP: One-sided error }
 
-Suppose that $\Alg\in\RP$. Then $\forall$ inputs $x$,
+\begin{definition}
+An algorithm $\Alg$ is in $\RP$ if it has polynomial worst-case runtime and, for all inputs $x$,
 \begin{align*}
-  x \in \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \geq \frac{1}{2} \\
-  x \notin \ell &\Rightarrow \Pr[\Alg \text{ accepts}] = 0
+  &\text{If $x \in \ell$, then $\Pr[\Alg \text{ accepts } x] \ge \frac12 $ } \\
+  &\text{If $x \not\in \ell$, then $\Pr[\Alg \text{ accepts } x] = 0 $ }
 \end{align*}
-and \Alg\ has polynomial worst-case runtime.
+\end{definition}
 
-\coRP\ is similar, but instead of erring when $x\in\ell$, an algorithm in \coRP\ can err when $x\notin\ell$.
+\begin{definition}
+An algorithm $\Alg$ is in $\coRP$ if it has polynomial worst-case runtime and, for all inputs $x$,
+\begin{align*}
+  &\text{If $x \in \ell$, then $\Pr[\Alg \text{ accepts } x] = 1 $ } \\
+  &\text{If $x \not\in \ell$, then $\Pr[\Alg \text{ accepts } x] < \frac12 $ }
+\end{align*}
+\end{definition}
 
-Note that an \RP\ algorithm corresponds to a Monte Carlo algorithm that can err only when $x \in \ell$, and similarly, an algorithm in \coRP\ corresponds to a Monte Carlo algorithm that can err only when $x \notin \ell$.
+Note that an \RP\ algorithm corresponds to a Monte Carlo algorithm that can err only when $x \in \ell$, and, similarly, an algorithm in \coRP\ corresponds to a Monte Carlo algorithm that can err only when $x \notin \ell$.
 
 \subsection{\ZPP\: Zero-error with expected polynomial time}
 
@@ -338,14 +358,14 @@ Additionally, we can show that the probability of error can be reduced to $\frac
 \Ppoly\ is the set of all deterministic polynomial-time algorithms with polynomial-in-the-input advice strings. As you can surmise, it's a very large complexity class, and may not be useful for computation; however, it is immensely useful in complexity theory.
 We'll show one relevant theoretical use of \Ppoly\ in a later section.
 
-Now, let's get back to that last remark; let's amplify the probability of success of a \BPP\ algorithm. 
+Now, let's get back to that last remark; let's amplify the probability of success of a \BPP\ algorithm.
 
 Suppose that we want $\Pr[\text{accpet}] = (1-\delta)$. We claim that for a \BPP\ algorithm, this can be accomplished with only $O(\log{\frac{1}{\delta}})$ overhead.
 
 \textbf{pf}: We run $k$ independent iterations of the algorithm, and then employ the Chernoff bound to bound the probability that the majority vote across all iterations is incorrect.
 
-Suppose $x\in\ell$. Then $\mathbb{E}[\text{accept}] \geq \frac{2}{3}k$. 
-So 
+Suppose $x\in\ell$. Then $\mathbb{E}[\text{accept}] \geq \frac{2}{3}k$.
+So
 \begin{align*}
   \Pr[\text{majority accept} \leq \frac{2}{3}k - t] &\leq e^{-{\frac{2t^2}{k}}} &&\text{(by Chernoff Bound)} \\
   \text{Let } t = \frac{k}{\delta}, \\
@@ -405,7 +425,7 @@ This actually just means $\Alg(\_, r)$ is deterministic. Since both amplificatio
 % isbn = {0-521-47465-5, 9780521474658},
 % publisher = {Cambridge University Press},
 % address = {New York, NY, USA},
-%} 
+%}
 
 %notes on BPP, amplification, Ppoly, adlemans theorem:
 %http://people.csail.mit.edu/madhu/ST07/scribe/lect11.pdf
