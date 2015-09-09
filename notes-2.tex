@@ -244,6 +244,7 @@ Note that $T_{n-k} = n / k$ precisely because we draw coupons uniformly at rando
 Let's begin our whirlwind tour of complexity theory. We'll explore, to varying degrees, \Pt,\ \NP,\ab\ \ZPP,\ \RP,\ \coRP, and \BPP.
 
 We use as supplemental material section 1.5 from \textit{Randomized Algorithms} by Motwani and Raghavan.
+Note that formally, we use a set of $languages$ meeting some condition to define a complexity class, but we'll be looser and also speak in terms of algorithms inhabiting these classes.
 
 \subsection{\Pt: Polynomial-time deterministic algorithms}
 
@@ -321,6 +322,9 @@ Additionally, we can show that the probability of error can be reduced to $\frac
 
 \subsection{\Ppoly\ and amplification}
 
+\Ppoly\ is the set of all deterministic polynomial-time algorithms with polynomial-in-the-input advice strings. As you can surmise, it's a very large complexity class, and may not be useful for computation; however, it is immensely useful in complexity theory.
+We'll show one relevant theoretical use of \Ppoly\ in a later section.
+
 \subsection{Containments}
 
 It is known that $\Pt\subset\ZPP$, but it is not known whether $\ZPP\subset\Pt$.
@@ -353,6 +357,8 @@ $\RP=\ZPP=\coRP$
 % \newblock The Space Complexity of Approximating the Frequency Moments.
 % \newblock {\em J. Comput. Syst. Sci.}, 58(1):137--147, 1999.
 
+%notes on BPP, amplification, Ppoly, adlemans theorem:
+%http://people.csail.mit.edu/madhu/ST07/scribe/lect11.pdf
 \end{thebibliography}
 
 \end{document}
