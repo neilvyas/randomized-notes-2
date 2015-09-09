@@ -305,8 +305,8 @@ This complexity class corresponds to Las Vegas-type randomized algorithms. Thus,
 \begin{definition}
 An algorithm $\Alg$ is in $PP$ (probabilistic polynomial time) if it has polynomial worst-case runtime and, for all inputs $x$,
 \begin{align*}
-  &\text{If $x \in \ell$, $\Pr[\Alg \text{ accepts}] \ge \frac12$} \\
-  &\text{If $x \not\in \ell$, $\Pr[\Alg \text{ accepts}] \le \frac12$}
+  &\text{If $x \in \ell$, $\Pr[\Alg \text{ accepts } x] \ge \frac12$} \\
+  &\text{If $x \not\in \ell$, $\Pr[\Alg \text{ accepts } x] \le \frac12$}
 \end{align*}
 \end{definition}
 
@@ -341,8 +341,8 @@ We introduce $\BPP$ in the hopes of remedying this situation.
 \begin{definition}
 An algorithm $\Alg$ is in $\BPP$ (bounded probabilistic time) if, for all inputs $x$,
 \begin{align*}
-  &x \in \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \geq \frac{3}{4} \\
-  &x \notin \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \leq \frac{1}{4}
+  &\text{If $x \in \ell$, $\Pr[\Alg \text{ accepts } x] \ge \frac34$} \\
+  &\text{If $x \not\in \ell$, $\Pr[\Alg \text{ accepts } x] \le \frac14$}
 \end{align*}
 \end{definition}
 
@@ -360,14 +360,14 @@ We'll show one relevant theoretical use of \Ppoly\ in a later section.
 
 Now, let's get back to that last remark; let's amplify the probability of success of a \BPP\ algorithm.
 
-Suppose that we want $\Pr[\text{accpet}] = (1-\delta)$. We claim that for a \BPP\ algorithm, this can be accomplished with only $O(\log{\frac{1}{\delta}})$ overhead.
+Suppose that we want $\Pr[\text{accept}] = (1-\delta)$. We claim that for a \BPP\ algorithm, this can be accomplished with only $O(\log{\frac{1}{\delta}})$ overhead.
 
-\textbf{pf}: We run $k$ independent iterations of the algorithm, and then employ the Chernoff bound to bound the probability that the majority vote across all iterations is incorrect.
+\textbf{Proof:} We run $k$ independent iterations of the algorithm, and then employ the Chernoff bound to bound the probability that the majority vote across all iterations is incorrect.
 
 Suppose $x\in\ell$. Then $\mathbb{E}[\text{accept}] \geq \frac{2}{3}k$.
 So
 \begin{align*}
-  \Pr[\text{majority accept} \leq \frac{2}{3}k - t] &\leq e^{-{\frac{2t^2}{k}}} &&\text{(by Chernoff Bound)} \\
+  \Pr\left[\text{majority accept} \leq \frac{2}{3}k - t\right] &\leq e^{-{\frac{2t^2}{k}}} &&\text{(by Chernoff Bound)} \\
   \text{Let } t = \frac{k}{\delta}, \\
   &= e^{-{\frac{2k}{{\delta}^2}}} \\
   Something\ goes\ here
@@ -380,8 +380,7 @@ It should also be apparent that $\ZPP = \RP\cap\coRP$, as stated above.
 
 We claim that $\Pt\subset\RP\subset\NP$, and that $\RP\subset\BPP$; here we will only prove that $\RP\subset\NP$.
 
-$\mathbf{pf: }$
-Let $x$ be a candidate solution to an \RP\ problem.
+\textbf{Proof:} Let $x$ be a candidate solution to an \RP\ problem.
 \begin{align*}
   x\notin\ell &\Rightarrow \text{we discard the advice string}\\
   x\in\ell &\Rightarrow \exists\text{ an advice string $a$ that can prove that.}\\
