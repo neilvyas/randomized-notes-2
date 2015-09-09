@@ -244,6 +244,7 @@ Note that $T_{n-k} = n / k$ precisely because we draw coupons uniformly at rando
 Let's begin our whirlwind tour of complexity theory. We'll explore, to varying degrees, \Pt,\ \NP,\ab\ \ZPP,\ \RP,\ \coRP, and \BPP.
 
 We use as supplemental material section 1.5 from \textit{Randomized Algorithms} by Motwani and Raghavan.
+Note that formally, we use a set of $languages$ meeting some condition to define a complexity class, but we'll be looser and also speak in terms of algorithms inhabiting these classes.
 
 \subsection{\Pt: Polynomial-time deterministic algorithms}
 
@@ -290,7 +291,7 @@ Suppose that $\Alg\in\PP$. Then $\forall$ inputs $x$,
 \end{align*}
 and \Alg\ has polynomial worst-case runtime.
 
-However, the nature of this definition means that \PP\ is not a very useful class; for example, $\NP\subset\PP$. To consider this we consider SAT, the unrestricted satisfiability problem: Given $f(x_1, \dots, x_n)$, is it satisfiable?
+However, the nature of this definition means that \PP\ is not a very useful class; for example, $\NP\subset\PP$. To show this we consider SAT, the unrestricted satisfiability problem: Given $f(x_1, \dots, x_n)$, is it satisfiable?
 
 We propose the following algorithm: %format this like an algo, maybe?
 
@@ -321,6 +322,24 @@ Additionally, we can show that the probability of error can be reduced to $\frac
 
 \subsection{\Ppoly\ and amplification}
 
+\Ppoly\ is the set of all deterministic polynomial-time algorithms with polynomial-in-the-input advice strings. As you can surmise, it's a very large complexity class, and may not be useful for computation; however, it is immensely useful in complexity theory.
+We'll show one relevant theoretical use of \Ppoly\ in a later section.
+
+Now, let's get back to that last remark; let's amplify the probability of success of a \BPP\ algorithm. 
+
+Suppose that we want $\Pr[\text{accpet}] = (1-\delta)$. We claim that for a \BPP\ algorithm, this can be accomplished with only $O(\log{\frac{1}{\delta}})$ overhead.
+
+\textbf{pf}: We run $k$ independent iterations of the algorithm, and then employ the Chernoff bound to bound the probability that the majority vote across all iterations is incorrect.
+
+Suppose $x\in\ell$. Then $\mathbb{E}[\text{accept}] \geq \frac{2}{3}k$. 
+So 
+\begin{align*}
+  \Pr[\text{majority accept} \leq \frac{2}{3}k - t] &\leq e^{-{\frac{2t^2}{k}}} &&\text{(by Chernoff Bound)} \\
+  \text{Let } t = \frac{k}{\delta}, \\
+  &= e^{-{\frac{2k}{{\delta}^2}}} \\
+  Something\ goes\ here
+\end{align*}
+
 \subsection{Containments}
 
 It is known that $\Pt\subset\ZPP$, but it is not known whether $\ZPP\subset\Pt$.
@@ -344,6 +363,19 @@ $\RP=\ZPP=\coRP$
 
 \section{Adleman's Theorem}
 
+Adleman's Theorem states that $\BPP\subset\Ppoly$. We'll prove this below.
+
+Let $\Alg\in\BPP$.
+
+$\exists 2^n$ problems of size $n$ (this should be apparent if we define a problem to be a string of $1$ and $0$).
+
+Thus, we amplify \Alg\ with $\delta = \frac{1}{2^{n+1}}$; by a previous result, the overhead for this is $O(\log{\frac{1}{\delta}})$. Now let \Alg\ denote this amplified algorithm; evidently $\Alg\in\BPP$.
+
+Over all random advice strings $r$, the average number of inputs $\Alg(\_, r)$ fails on is $\frac{2^n}{2^{n+1}} \leq \frac{1}{2}$. Thus $\exists r$ s.t. $\forall$ inputs $x, \Alg(x, r)$ is always correct.
+
+This actually just means $\Alg(\_, r)$ is deterministic. Since both amplification and finding $r$ are at most polynomial, $\Alg(\_, r)$ must also be in \Ppoly. This completes the proof.
+
+
 \bibliographystyle{alpha}
 
 \begin{thebibliography}{42}
@@ -353,6 +385,17 @@ $\RP=\ZPP=\coRP$
 % \newblock The Space Complexity of Approximating the Frequency Moments.
 % \newblock {\em J. Comput. Syst. Sci.}, 58(1):137--147, 1999.
 
+%@book{Motwani:1995:RA:211390,
+% author = {Motwani, Rajeev and Raghavan, Prabhakar},
+% title = {Randomized Algorithms},
+% year = {1995},
+% isbn = {0-521-47465-5, 9780521474658},
+% publisher = {Cambridge University Press},
+% address = {New York, NY, USA},
+%} 
+
+%notes on BPP, amplification, Ppoly, adlemans theorem:
+%http://people.csail.mit.edu/madhu/ST07/scribe/lect11.pdf
 \end{thebibliography}
 
 \end{document}
