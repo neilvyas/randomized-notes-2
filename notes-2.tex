@@ -395,7 +395,10 @@ $\RP=\ZPP=\coRP$
 
 \section{Adleman's Theorem}
 
-Adleman's Theorem states that $\BPP\subset\Ppoly$. We'll prove this below.
+\begin{theorem}
+\textbf{Adleman's Theorem:} $\BPP\subset\Ppoly$.
+
+\textbf{Proof:}
 
 Let $\Alg\in\BPP$.
 
@@ -406,6 +409,7 @@ Thus, we amplify \Alg\ with $\delta = \frac{1}{2^{n+1}}$; by a previous result, 
 Over all random advice strings $r$, the average number of inputs $\Alg(\_, r)$ fails on is $\frac{2^n}{2^{n+1}} \leq \frac{1}{2}$. Thus $\exists r$ s.t. $\forall$ inputs $x, \Alg(x, r)$ is always correct.
 
 This actually just means $\Alg(\_, r)$ is deterministic. Since both amplification and finding $r$ are at most polynomial, $\Alg(\_, r)$ must also be in \Ppoly. This completes the proof.
+\end{theorem}
 
 
 \bibliographystyle{alpha}
