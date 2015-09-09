@@ -1,5 +1,7 @@
 \documentclass[11pt]{article}
 \usepackage{amsmath,amssymb,amsthm}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \DeclareMathOperator*{\E}{\mathbb{E}}
 \let\Pr\relax
@@ -250,7 +252,7 @@ We use as supplemental material section 1.5 from \textit{Randomized Algorithms} 
 These can be described by Turing machines and $languages$. A $language$ $\ell \subset \{0,1\}^n$ such that for a candidate $x,\ x \in \ell \Rightarrow$ we accept $x$ as an answer; otherwise we reject.
 Therefore, given an interactive protocol for checking against $\ell$, we can use binary search to determine $x$.
 
-Formally, the class \Pt\ consists of all languages $\ell$ that have a polynomial-time algorithm \Alg\ s.t. for any input $x$, 
+Formally, the class \Pt\ consists of all languages $\ell$ that have a polynomial-time algorithm \Alg\ s.t. for any input $x$,
 \begin{align*}
   x \in \ell &\Rightarrow \Alg \text{ accepts} \\
   x \notin \ell &\Rightarrow \Alg \text{ accepts}
@@ -273,7 +275,7 @@ and \Alg\ has polynomial worst-case runtime.
 
 \coRP\ is similar, but instead of erring when $x\in\ell$, an algorithm in \coRP\ can err when $x\notin\ell$.
 
-Note that an \RP\ algorithm corresponds to a Monte Carlo algorithm that can err only when $x \in \ell$, and similarly, an algorithm in \coRP\ corresponds to a Monte Carlo algorithm that can err only when $x \notin \ell$. 
+Note that an \RP\ algorithm corresponds to a Monte Carlo algorithm that can err only when $x \in \ell$, and similarly, an algorithm in \coRP\ corresponds to a Monte Carlo algorithm that can err only when $x \notin \ell$.
 
 \subsection{\ZPP\: Zero-error with expected polynomial time}
 
@@ -292,12 +294,25 @@ and \Alg\ has polynomial worst-case runtime.
 
 However, the nature of this definition means that \PP\ is not a very useful class; for example, $\NP\subset\PP$. To consider this we consider SAT, the unrestricted satisfiability problem: Given $f(x_1, \dots, x_n)$, is it satisfiable?
 
-We propose the following algorithm: %format this like an algo, maybe?
+We propose the following algorithm:
 
-%TODO Sid can you format this please?
-Choose $(x_1, \dots, x_n)$ uniformly at random. \\
- if $f(x_1, \dots, x_n) = 1$: \textbf{return} ``yes''\\
- else: \textbf{return} ``yes'' with $\Pr = \frac{1}{2}$
+% H option ensures that the algorithm is placed "Here",
+% i.e. does not float
+\begin{algorithm}[H]
+\begin{algorithmic}
+\Function{RandomizedSAT}{$f: \{\mathrm{True},\mathrm{False}\}^n \to \{\mathrm{True},\mathrm{False}\}$}$: \{\mathrm{True},\mathrm{False}\}$
+  \ForAll{$i \in \{1 \dots n\}$}
+    \State $x_i \gets $ Uniform(True, False)
+  \EndFor
+  \If {$f(x_1,\dots,x_n) = \mathrm{True}$}
+    \State \Return True
+  \Else
+    \State $b \gets $ Uniform(True, False)
+    \State \Return $b$
+  \EndIf
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
 
 Suppose that the input is satisfiable; then $\Pr[\text{yes}] \geq \frac{1}{2} + \frac{1}{2^{n+1}}$.
 
@@ -305,15 +320,15 @@ Thus we can solve SAT in \PP.
 
 Note that since we can reduce every problem in \NP\ to SAT, we've just shown that we can solve any problem in \NP\ in \PP. Thus, \PP\ isn't a very useful class to reason about.
 
-We introduce \BPP\ in hopes oof remedying this situation; namely, suppose that $\Alg\in\BPP$. 
+We introduce \BPP\ in hopes oof remedying this situation; namely, suppose that $\Alg\in\BPP$.
 
 Then $\forall$ inputs $x$,
 \begin{align*}
   x \in \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \geq \frac{3}{4} \\
-  x \notin \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \leq \frac{1}{4} 
+  x \notin \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \leq \frac{1}{4}
 \end{align*}
 
-Note that the specific numbers used for the bounds are able to be changed to 
+Note that the specific numbers used for the bounds are able to be changed to
 $$\frac{1}{2} \pm \frac{1}{p(n)}$$
 for any polynomial $p(n)$.
 
@@ -329,11 +344,11 @@ It should also be apparent that $\ZPP = \RP\cap\coRP$, as stated above.
 We claim that $\Pt\subset\RP\subset\NP$, and that $\RP\subset\BPP$; here we will only prove that $\RP\subset\NP$.
 
 $\mathbf{pf: }$
-Let $x$ be a candidate solution to an \RP\ problem. 
+Let $x$ be a candidate solution to an \RP\ problem.
 \begin{align*}
   x\notin\ell &\Rightarrow \text{we discard the advice string}\\
   x\in\ell &\Rightarrow \exists\text{ an advice string $a$ that can prove that.}\\
-  &\Rightarrow \RP \Rightarrow \NP \text{ involves fixing an advice string.} 
+  &\Rightarrow \RP \Rightarrow \NP \text{ involves fixing an advice string.}
 \end{align*}
 
 It is not known whether the following statements hold:
