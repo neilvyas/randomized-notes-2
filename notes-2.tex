@@ -298,20 +298,19 @@ Note that an \RP\ algorithm corresponds to a Monte Carlo algorithm that can err 
 
 \subsection{\ZPP\: Zero-error with expected polynomial time}
 
-This complexity class corresponds to Las Vegas-type randomized algorithms. Thus, you might expect that $\ZPP = \RP \cap \coRP$.
+This complexity class corresponds to Las Vegas-type randomized algorithms. Thus, $\ZPP = \RP \cap \coRP$.
 
 \subsection{\PP\ and \BPP: Two-sided error }
 
-\PP, or Probabalistic Polynomial time, consists of algorithms that run in polynomial worst-case time with the following additional constraint:
-
-Suppose that $\Alg\in\PP$. Then $\forall$ inputs $x$,
+\begin{definition}
+An algorithm $\Alg$ is in $PP$ (probabilistic polynomial time) if it has polynomial worst-case runtime and, for all inputs $x$,
 \begin{align*}
-  x \in \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \ge \frac{1}{2} \\
-  x \notin \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \le \frac{1}{2} \\
+  &\text{If $x \in \ell$, $\Pr[\Alg \text{ accepts}] \ge \frac12$} \\
+  &\text{If $x \not\in \ell$, $\Pr[\Alg \text{ accepts}] \le \frac12$}
 \end{align*}
-and \Alg\ has polynomial worst-case runtime.
+\end{definition}
 
-However, the nature of this definition means that \PP\ is not a very useful class; for example, $\NP\subset\PP$. To show this we consider SAT, the unrestricted satisfiability problem: Given $f(x_1, \dots, x_n)$, is it satisfiable?
+Unfortunately, $\PP$ is not a very useful class. For example, $\NP\subseteq\PP$. To show this we consider SAT, the unrestricted satisfiability problem: Given $f(x_1, \dots, x_n)$, is it satisfiable?
 
 We propose the following algorithm:
 
@@ -333,19 +332,20 @@ We propose the following algorithm:
 \end{algorithmic}
 \end{algorithm}
 
-Suppose that the input is satisfiable; then $\Pr[\text{yes}] \geq \frac{1}{2} + \frac{1}{2^{n+1}}$.
+Suppose that the input is satisfiable; then $\Pr[\text{RandomizedSAT accepts}] \geq \frac{1}{2} + \frac{1}{2^{n+1}}$.
+Similarly, if the input is not satisfiable, $\Pr[\text{RandomizedSAT rejects}] = \frac12$.  Thus SAT is in \PP.
 
-Thus we can solve SAT in \PP.
+Note that since we can reduce every problem in \NP\ to SAT, every $\NP$ is in \PP. Thus, \PP\ isn't a very useful class to reason about.
 
-Note that since we can reduce every problem in \NP\ to SAT, we've just shown that we can solve any problem in \NP\ in \PP. Thus, \PP\ isn't a very useful class to reason about.
-
-We introduce \BPP\ in hopes oof remedying this situation; namely, suppose that $\Alg\in\BPP$.
-
-Then $\forall$ inputs $x$,
+We introduce $\BPP$ in the hopes of remedying this situation.
+\begin{definition}
+An algorithm $\Alg$ is in $\BPP$ (bounded probabilistic time) if, for all inputs $x$,
 \begin{align*}
-  x \in \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \geq \frac{3}{4} \\
-  x \notin \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \leq \frac{1}{4}
+  &x \in \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \geq \frac{3}{4} \\
+  &x \notin \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \leq \frac{1}{4}
 \end{align*}
+\end{definition}
+
 
 Note that the specific numbers used for the bounds are able to be changed to
 $$\frac{1}{2} \pm \frac{1}{p(n)}$$
