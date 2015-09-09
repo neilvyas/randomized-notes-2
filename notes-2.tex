@@ -325,6 +325,21 @@ Additionally, we can show that the probability of error can be reduced to $\frac
 \Ppoly\ is the set of all deterministic polynomial-time algorithms with polynomial-in-the-input advice strings. As you can surmise, it's a very large complexity class, and may not be useful for computation; however, it is immensely useful in complexity theory.
 We'll show one relevant theoretical use of \Ppoly\ in a later section.
 
+Now, let's get back to that last remark; let's amplify the probability of success of a \BPP\ algorithm. 
+
+Suppose that we want $\Pr[\text{accpet}] = (1-\delta)$. We claim that for a \BPP\ algorithm, this can be accomplished with only $O(\log{\frac{1}{\delta}})$ overhead.
+
+\textbf{pf}: We run $k$ independent iterations of the algorithm, and then employ the Chernoff bound to bound the probability that the majority vote across all iterations is incorrect.
+
+Suppose $x\in\ell$. Then $\mathbb{E}[\text{accept}] \geq \frac{2}{3}k$. 
+So 
+\begin{align*}
+  \Pr[\text{majority accept} \leq \frac{2}{3}k - t] &\leq e^{-{\frac{2t^2}{k}}} &&\text{(by Chernoff Bound)} \\
+  \text{Let } t = \frac{k}{\delta}, \\
+  &= e^{-{\frac{2k}{{\delta}^2}}} \\
+  Something\ goes\ here
+\end{align*}
+
 \subsection{Containments}
 
 It is known that $\Pt\subset\ZPP$, but it is not known whether $\ZPP\subset\Pt$.
