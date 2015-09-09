@@ -10,6 +10,18 @@
 \newcommand{\inprod}[1]{\left\langle #1 \right\rangle}
 \newcommand{\R}{\mathbb{R}}
 
+%complexity theory variables.
+\newcommand{\Pt}{\ensuremath{\mathbf{P}}}
+\newcommand{\NP}{\ensuremath{\mathbf{NP}}}
+\newcommand{\PP}{\ensuremath{\mathbf{PP}}}
+\newcommand{\BPP}{\ensuremath{\mathbf{BPP}}}
+\newcommand{\ZPP}{\ensuremath{\mathbf{Z_{PP}}}}
+\newcommand{\RP}{\ensuremath{\mathbf{R_{P}}}}
+\newcommand{\coRP}{\ensuremath{\mathbf{coR_{P}}}}
+\newcommand{\Ppoly}{\ensuremath{\mathbf{P_{poly}}}}
+
+\newcommand{\Alg}{\ensuremath{\mathcal{A}}}
+
 \newcommand{\handout}[5]{
   \noindent
   \begin{center}
@@ -50,6 +62,9 @@
 
 \parindent 0in
 \parskip 1.5ex
+
+%for wrapping inline math mode.
+\let\ab\allowbreak
 
 \begin{document}
 
@@ -225,6 +240,107 @@ Then
 Note that $T_{n-k} = n / k$ precisely because we draw coupons uniformly at random.
 
 \section{Background on Complexity Theory}
+
+Let's begin our whirlwind tour of complexity theory. We'll explore, to varying degrees, \Pt,\ \NP,\ab\ \ZPP,\ \RP,\ \coRP, and \BPP.
+
+We use as supplemental material section 1.5 from \textit{Randomized Algorithms} by Motwani and Raghavan.
+
+\subsection{\Pt: Polynomial-time deterministic algorithms}
+
+These can be described by Turing machines and $languages$. A $language$ $\ell \subset \{0,1\}^n$ such that for a candidate $x,\ x \in \ell \Rightarrow$ we accept $x$ as an answer; otherwise we reject.
+Therefore, given an interactive protocol for checking against $\ell$, we can use binary search to determine $x$.
+
+Formally, the class \Pt\ consists of all languages $\ell$ that have a polynomial-time algorithm \Alg\ s.t. for any input $x$, 
+\begin{align*}
+  x \in \ell &\Rightarrow \Alg \text{ accepts} \\
+  x \notin \ell &\Rightarrow \Alg \text{ accepts}
+\end{align*}
+
+\subsection{\NP: \Pt\ with a good ``advice'' string}
+
+``Advice'' given to a Turing machine is an additional input string allowed to depend on the length of the input, $n$, but not the input itself. A problem is in $\NP \Leftrightarrow \forall\text{inputs, }\exists$ advice such that an algorithm with the given advice always decides correctly. If the advice string is random, then the algorithm is randomized.
+
+Note that for our purposes, the advice string may be arbitrarily long, but the algorithm can only inspect a polynomial-in-the-length-of-the-input amount of it.
+
+\subsection{\RP\ and \coRP: One-sided error }
+
+Suppose that $\Alg\in\RP$. Then $\forall$ inputs $x$,
+\begin{align*}
+  x \in \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \geq \frac{1}{2} \\
+  x \notin \ell &\Rightarrow \Pr[\Alg \text{ accepts}] = 0
+\end{align*}
+and \Alg\ has polynomial worst-case runtime.
+
+\coRP\ is similar, but instead of erring when $x\in\ell$, an algorithm in \coRP\ can err when $x\notin\ell$.
+
+Note that an \RP\ algorithm corresponds to a Monte Carlo algorithm that can err only when $x \in \ell$, and similarly, an algorithm in \coRP\ corresponds to a Monte Carlo algorithm that can err only when $x \notin \ell$. 
+
+\subsection{\ZPP\: Zero-error with expected polynomial time}
+
+This complexity class corresponds to Las Vegas-type randomized algorithms. Thus, you might expect that $\ZPP = \RP \cap \coRP$.
+
+\subsection{\PP\ and \BPP: Two-sided error }
+
+\PP, or Probabalistic Polynomial time, consists of algorithms that run in polynomial worst-case time with the following additional constraint:
+
+Suppose that $\Alg\in\PP$. Then $\forall$ inputs $x$,
+\begin{align*}
+  x \in \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \ge \frac{1}{2} \\
+  x \notin \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \le \frac{1}{2} \\
+\end{align*}
+and \Alg\ has polynomial worst-case runtime.
+
+However, the nature of this definition means that \PP\ is not a very useful class; for example, $\NP\subset\PP$. To consider this we consider SAT, the unrestricted satisfiability problem: Given $f(x_1, \dots, x_n)$, is it satisfiable?
+
+We propose the following algorithm: %format this like an algo, maybe?
+
+%TODO Sid can you format this please?
+Choose $(x_1, \dots, x_n)$ uniformly at random. \\
+ if $f(x_1, \dots, x_n) = 1$: \textbf{return} ``yes''\\
+ else: \textbf{return} ``yes'' with $\Pr = \frac{1}{2}$
+
+Suppose that the input is satisfiable; then $\Pr[\text{yes}] \geq \frac{1}{2} + \frac{1}{2^{n+1}}$.
+
+Thus we can solve SAT in \PP.
+
+Note that since we can reduce every problem in \NP\ to SAT, we've just shown that we can solve any problem in \NP\ in \PP. Thus, \PP\ isn't a very useful class to reason about.
+
+We introduce \BPP\ in hopes oof remedying this situation; namely, suppose that $\Alg\in\BPP$. 
+
+Then $\forall$ inputs $x$,
+\begin{align*}
+  x \in \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \geq \frac{3}{4} \\
+  x \notin \ell &\Rightarrow \Pr[\Alg \text{ accepts}] \leq \frac{1}{4} 
+\end{align*}
+
+Note that the specific numbers used for the bounds are able to be changed to 
+$$\frac{1}{2} \pm \frac{1}{p(n)}$$
+for any polynomial $p(n)$.
+
+Additionally, we can show that the probability of error can be reduced to $\frac{1}{2^n}$ in a polynomial number of iterations; we'll return to this shortly.
+
+\subsection{\Ppoly\ and amplification}
+
+\subsection{Containments}
+
+It is known that $\Pt\subset\ZPP$, but it is not known whether $\ZPP\subset\Pt$.
+It should also be apparent that $\ZPP = \RP\cap\coRP$, as stated above.
+
+We claim that $\Pt\subset\RP\subset\NP$, and that $\RP\subset\BPP$; here we will only prove that $\RP\subset\NP$.
+
+$\mathbf{pf: }$
+Let $x$ be a candidate solution to an \RP\ problem. 
+\begin{align*}
+  x\notin\ell &\Rightarrow \text{we discard the advice string}\\
+  x\in\ell &\Rightarrow \exists\text{ an advice string $a$ that can prove that.}\\
+  &\Rightarrow \RP \Rightarrow \NP \text{ involves fixing an advice string.} 
+\end{align*}
+
+It is not known whether the following statements hold:
+
+$\BPP\subset\NP$
+
+$\RP=\ZPP=\coRP$
 
 \section{Adleman's Theorem}
 
