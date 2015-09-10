@@ -356,7 +356,7 @@ Now, let's get back to that last remark; let's amplify the probability of succes
 
 Suppose that we want a $\BPP$ algorithm with $\Pr[\text{accept $x$ if $x\in\ell$}] \ge 1-\delta$ and $\Pr[\text{reject $x$ if $x\not\in\ell$}] \ge 1 - \delta$. We claim that for a \BPP\ algorithm, this can be accomplished with only $O(\log{\frac{1}{\delta}})$ time overhead.
 
-\begin{claim}
+\begin{claim}\label{amplification}
 \textbf{Amplification.} Given a $\BPP$ algorithm for some problem that accepts correct answers with probability at least $\frac23$, and rejects incorrect answers with probability at least $\frac23$, there exists a $\BPP$ algorithm that accepts correct answers with probability at least $1 - \delta$ and rejects incorrect answers with probability at least $1 - \delta$, for any $0 \le \delta < 1$.
 
 \end{claim}
@@ -412,21 +412,28 @@ It is not known whether the following statements hold:
 \section{Adleman's Theorem}
 
 \begin{theorem}
-\textbf{Adleman's Theorem:} $\BPP\subset\Ppoly$.
+\textbf{Adleman's Theorem:} $\BPP\subseteq\Ppoly$.
+\end{theorem}
 
 \textbf{Proof:}
 
 Let $\Alg\in\BPP$.
 
-$\exists 2^n$ problems of size $n$ (this should be apparent if we define a problem to be a string of $1$ and $0$).
+By Claim \ref{amplification}, there exists an algorithm $\Alg' \in \BPP$ with $\delta = \frac{1}{2^{n+1}}$.
 
-Thus, we amplify \Alg\ with $\delta = \frac{1}{2^{n+1}}$; by a previous result, the overhead for this is $O(\log{\frac{1}{\delta}})$. Now let \Alg\ denote this amplified algorithm; evidently $\Alg\in\BPP$.
+Let $\mathrm{Bad}(x)$ be the set of advice strings $r$ such that $\Alg'(x,r)$ is incorrect.
+So, over the advice string $R$,
+\begin{align*}
+  P[\exists x \text{ s.t. $R \in \mathrm{Bad}(x)$}]
+  &= P\left[\bigcup_{x \in \{0,1\}^n} R \in \mathrm{Bad}(x) \right] \\
+  &\le \sum_{x \in \{0,1\}^n} P(R \in \mathrm{Bad}(x)) &\text{(union bound)}\\
+  &\le 2^n \cdot \frac{1}{2^{n+1}} \\
+  &= \frac12 < 1
+\end{align*}
 
-Over all random advice strings $r$, the average number of inputs $\Alg(\_, r)$ fails on is $\frac{2^n}{2^{n+1}} \leq \frac{1}{2}$. Thus $\exists r$ s.t. $\forall$ inputs $x, \Alg(x, r)$ is always correct.
+Thus, there is a positive probability that $\Alg'$ succeeds on every $x$. Thus there exists a random advice string (call it $r_n$) such that for all inputs $x$ of length $n$, $\Alg'(x, r_n)$ gives the correct answer.
 
-This actually just means $\Alg(\_, r)$ is deterministic. Since both amplification and finding $r$ are at most polynomial, $\Alg(\_, r)$ must also be in \Ppoly. This completes the proof.
-\end{theorem}
-
+So, the algorithm $\Alg'(x, r_n)$ is a polynomial-time deterministic algorithm that, given the appropriate advice string $r_n$, gives the correct answer for all inputs $x$ of length $n$. So $\Alg' \in \Ppoly$.
 
 \bibliographystyle{alpha}
 
