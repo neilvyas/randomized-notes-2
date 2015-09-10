@@ -348,21 +348,13 @@ An algorithm $\Alg$ is in $\BPP$ (bounded probabilistic time) if, for all inputs
 \end{align*}
 \end{definition}
 
+In the next section, we will show that we can amplify any $\BPP$ algorithm to arbitrary accuracy.
 
-Note that the specific numbers used for the bounds are able to be changed to
-$$\frac{1}{2} \pm \frac{1}{p(n)}$$
-for any polynomial $p(n)$.
-
-Additionally, we can show that the probability of error can be reduced to $\frac{1}{2^n}$ in a polynomial number of iterations; we'll return to this shortly.
-
-\subsection{\Ppoly\ and amplification}
-
-\Ppoly\ is the set of all deterministic polynomial-time algorithms with polynomial-in-the-input advice strings. As you can surmise, it's a very large complexity class, and may not be useful for computation; however, it is immensely useful in complexity theory.
-We'll show one relevant theoretical use of \Ppoly\ in a later section.
+\subsection{Amplification of $\BPP$ algorithms}
 
 Now, let's get back to that last remark; let's amplify the probability of success of a \BPP\ algorithm.
 
-Suppose that we want $\Pr[\text{accept}] = (1-\delta)$. We claim that for a \BPP\ algorithm, this can be accomplished with only $O(\log{\frac{1}{\delta}})$ overhead.
+Suppose that we want a $\BPP$ algorithm with $\Pr[\text{accept $x$ if $x\in\ell$}] \ge 1-\delta$ and $\Pr[\text{reject $x$ if $x\not\in\ell$}] \ge 1 - \delta$. We claim that for a \BPP\ algorithm, this can be accomplished with only $O(\log{\frac{1}{\delta}})$ time overhead.
 
 \begin{claim}
 \textbf{Amplification.} Given a $\BPP$ algorithm for some problem that accepts correct answers with probability at least $\frac23$, and rejects incorrect answers with probability at least $\frac23$, there exists a $\BPP$ algorithm that accepts correct answers with probability at least $1 - \delta$ and rejects incorrect answers with probability at least $1 - \delta$, for any $0 \le \delta < 1$.
@@ -387,13 +379,22 @@ The proof that $\Alg_1$ rejects incorrect answers with probability at least $1 -
 
 So, $\Alg'$ is in $\BPP$ with the $1 - \delta$ bounds that we desired, if we set $k$ appropriately.
 
+\subsection{\Ppoly}
+
+\Ppoly\ is the set of all problems that are decidable by deterministic polynomial-time algorithms that can take in an advice string that depends on the size of the input, but not the input itself.
+
+We'll show one relevant theoretical use of \Ppoly\ in a later section.
+
 \subsection{Containments}
 
-It is known that $\Pt\subset\ZPP$, but it is not known whether $\ZPP\subset\Pt$.
+It is known that $\Pt\subseteq\ZPP$, but it is not known whether $\ZPP\subseteq\Pt$.
 It should also be apparent that $\ZPP = \RP\cap\coRP$, as stated above.
 
-We claim that $\Pt\subset\RP\subset\NP$, and that $\RP\subset\BPP$; here we will only prove that $\RP\subset\NP$.
+We claim that $\Pt\subseteq\RP\subseteq\NP$, and that $\RP\subseteq\BPP$; here we will only prove that $\RP\subseteq\NP$.
 
+\begin{claim}
+$\RP \subseteq \NP$.
+\end{claim}
 \textbf{Proof:} Let $x$ be a candidate solution to an \RP\ problem.
 \begin{align*}
   x\notin\ell &\Rightarrow \text{we discard the advice string}\\
@@ -403,9 +404,10 @@ We claim that $\Pt\subset\RP\subset\NP$, and that $\RP\subset\BPP$; here we will
 
 It is not known whether the following statements hold:
 
-$\BPP\subset\NP$
-
-$\RP=\ZPP=\coRP$
+\begin{itemize}
+  \item $\BPP\subset\NP$ ?
+  \item $\RP=\ZPP=\coRP$ ?
+\end{itemize}
 
 \section{Adleman's Theorem}
 
