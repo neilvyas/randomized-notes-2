@@ -343,8 +343,8 @@ We introduce $\BPP$ in the hopes of remedying this situation.
 \begin{definition}
 An algorithm $\Alg$ is in $\BPP$ (bounded probabilistic time) if, for all inputs $x$,
 \begin{align*}
-  &\text{If $x \in \ell$, $\Pr[\Alg \text{ accepts } x] \ge \frac34$} \\
-  &\text{If $x \not\in \ell$, $\Pr[\Alg \text{ accepts } x] \le \frac14$}
+  &\text{If $x \in \ell$, $\Pr[\Alg \text{ accepts } x] \ge \frac23$} \\
+  &\text{If $x \not\in \ell$, $\Pr[\Alg \text{ rejects } x] \le \frac23$}
 \end{align*}
 \end{definition}
 
@@ -364,16 +364,28 @@ Now, let's get back to that last remark; let's amplify the probability of succes
 
 Suppose that we want $\Pr[\text{accept}] = (1-\delta)$. We claim that for a \BPP\ algorithm, this can be accomplished with only $O(\log{\frac{1}{\delta}})$ overhead.
 
-\textbf{Proof:} We run $k$ independent iterations of the algorithm, and then employ the Chernoff bound to bound the probability that the majority vote across all iterations is incorrect.
+\begin{claim}
+\textbf{Amplification.} Given a $\BPP$ algorithm for some problem that accepts correct answers with probability at least $\frac23$, and rejects incorrect answers with probability at least $\frac23$, there exists a $\BPP$ algorithm that accepts correct answers with probability at least $1 - \delta$ and rejects incorrect answers with probability at least $1 - \delta$, for any $0 \le \delta < 1$.
 
-Suppose $x\in\ell$. Then $\mathbb{E}[\text{accept}] \geq \frac{2}{3}k$.
+\end{claim}
+\textbf{Proof:} Consider the algorithm $\Alg'$ that runs $k$ independent iterations of $\Alg$, and accepts if the majority of the runs accepted, and rejects if the majority of the runs rejected.
+
+and then employ the Chernoff bound to bound the probability that the majority vote across all iterations is incorrect.
+
+Suppose $x\in\ell$. Then $\mathbb{E}[\text{num. runs that accept } x] \geq \frac{2}{3}k$.
 So
 \begin{align*}
-  \Pr\left[\text{majority accept} \leq \frac{2}{3}k - t\right] &\leq e^{-{\frac{2t^2}{k}}} &&\text{(by Chernoff Bound)} \\
-  \text{Let } t = \frac{k}{\delta}, \\
-  &= e^{-{\frac{2k}{{\delta}^2}}} \\
-  Something\ goes\ here
+  &&\Pr\left[\text{num accepts }\leq \frac{2}{3}k - t\right] &\leq e^{-{\frac{2t^2}{k}}} &\text{(by Chernoff Bound)} \\
+  &\Rightarrow&
+  \Pr\left[\text{num accepts }\leq \frac12k\right] &\leq e^{-{\frac{k}{18}}} &\text{(letting $t = k/6$)} \\
+  &\Rightarrow &
+  k &\ge -18\log \delta &\text{(setting $e^{-\frac{k}{18}} \le \delta$)}
 \end{align*}
+So, the probability that the majority of the $k$ runs falsely reject (and thus $\Alg'$ rejects) when $x \in \ell$ is bounded by $\delta$ if we set $k \ge -18 \log \delta$.
+
+The proof that $\Alg_1$ rejects incorrect answers with probability at least $1 - \delta$ is similar.
+
+So, $\Alg'$ is in $\BPP$ with the $1 - \delta$ bounds that we desired, if we set $k$ appropriately.
 
 \subsection{Containments}
 
