@@ -2,6 +2,7 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{framed}
 
 \DeclareMathOperator*{\E}{\mathbb{E}}
 \let\Pr\relax
@@ -245,7 +246,7 @@ where $H_n = \sum_{i=1}^n \frac{1}{n}$ is the $n$th harmonic number.
 
 Let's begin our whirlwind tour of complexity theory. We'll explore, to varying degrees, \Pt,\ \NP,\ab\ \ZPP,\ \RP,\ \coRP, and \BPP.
 
-We use as supplemental material section 1.5 from \textit{Randomized Algorithms} by Motwani and Raghavan.
+We use as supplemental material section 1.5 from \textit{Randomized Algorithms} by Motwani and Raghavan \cite{MR}.
 Note that formally, complexity classes are sets of languages, but we'll be looser and also speak in terms of algorithms inhabiting these classes.
 
 \subsection{\Pt: Polynomial-time deterministic algorithms}
@@ -360,6 +361,10 @@ Suppose that we want a $\BPP$ algorithm with $\Pr[\text{accept $x$ if $x\in\ell$
 \textbf{Amplification.} Given a $\BPP$ algorithm for some problem that accepts correct answers with probability at least $\frac23$, and rejects incorrect answers with probability at least $\frac23$, there exists a $\BPP$ algorithm that accepts correct answers with probability at least $1 - \delta$ and rejects incorrect answers with probability at least $1 - \delta$, for any $0 \le \delta < 1$.
 
 \end{claim}
+
+\begin{leftbar}
+
+
 \textbf{Proof:} Consider the algorithm $\Alg'$ that runs $k$ independent iterations of $\Alg$, and accepts if the majority of the runs accepted, and rejects if the majority of the runs rejected.
 
 and then employ the Chernoff bound to bound the probability that the majority vote across all iterations is incorrect.
@@ -378,6 +383,7 @@ So, the probability that the majority of the $k$ runs falsely reject (and thus $
 The proof that $\Alg_1$ rejects incorrect answers with probability at least $1 - \delta$ is similar.
 
 So, $\Alg'$ is in $\BPP$ with the $1 - \delta$ bounds that we desired, if we set $k$ appropriately.
+\end{leftbar}
 
 \subsection{\Ppoly}
 
@@ -395,12 +401,27 @@ We claim that $\Pt\subseteq\RP\subseteq\NP$, and that $\RP\subseteq\BPP$; here w
 \begin{claim}
 $\RP \subseteq \NP$.
 \end{claim}
-\textbf{Proof:} Let $x$ be a candidate solution to an \RP\ problem.
-\begin{align*}
-  x\notin\ell &\Rightarrow \text{we discard the advice string}\\
-  x\in\ell &\Rightarrow \exists\text{ an advice string $a$ that can prove that.}\\
-  &\Rightarrow \RP \Rightarrow \NP \text{ involves fixing an advice string.}
-\end{align*}
+
+\begin{leftbar}
+
+\textbf{Proof:}
+
+Suppose $\Alg$ is a $\RP$ algorithm for the language $\ell$.
+
+To prove that $\ell \in \NP$, it is sufficient to show that $\Alg$ has polynomial runtime and that:
+\begin{enumerate}
+  \item For every $x \in \ell$, there exists an advice string $r$ such that $\Alg(x,r)$ accepts
+  \item For every $x \not\in \ell$, for all advice strings $r$, $\Alg(x,r)$ rejects.
+\end{enumerate}
+
+(1) is true since, by the definition of $\RP$, there is a random string $r$ such that $\Alg(x,r)$ accepts.
+
+(2) is true since, by the defintion of $\RP$, there is no random string $r$ such that $\Alg(x,r)$ accepts.
+
+So $\ell \in \NP$.
+
+\end{leftbar}
+
 
 It is not known whether the following statements hold:
 
@@ -414,6 +435,8 @@ It is not known whether the following statements hold:
 \begin{theorem}
 \textbf{Adleman's Theorem:} $\BPP\subseteq\Ppoly$.
 \end{theorem}
+
+\begin{leftbar}
 
 \textbf{Proof:}
 
@@ -434,6 +457,9 @@ So, over the advice string $R$,
 Thus, there is a positive probability that $\Alg'$ succeeds on every $x$. Thus there exists a random advice string (call it $r_n$) such that for all inputs $x$ of length $n$, $\Alg'(x, r_n)$ gives the correct answer.
 
 So, the algorithm $\Alg'(x, r_n)$ is a polynomial-time deterministic algorithm that, given the appropriate advice string $r_n$, gives the correct answer for all inputs $x$ of length $n$. So $\Alg' \in \Ppoly$.
+\end{leftbar}
+
+So, in a sense, randomness doesn't help \textit{that} much. Every problem in $\BPP$ can be solved in polynomial time without randomness (assuming we have an advice string for the $\Ppoly$ algorithm). However, randomized algorithms often give us a smaller polynomial runtime.
 
 \bibliographystyle{alpha}
 
